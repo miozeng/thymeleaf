@@ -1,0 +1,12 @@
+com\example\ServletInitializer.class
+com\example\config\SpringWebInitializer.class
+com\example\config\MailConfig.class
+com\example\service\EmailService.class
+com\example\controller\IndexController.class
+com\example\config\ThymeleafMailConfig.class
+com\example\dto\PaymentMethod.class
+com\example\dto\Gender.class
+com\example\dto\User.class
+com\example\controller\SendingController.class
+com\example\config\ThymeleafConfig.class
+com\example\ThymeleafApplication.class

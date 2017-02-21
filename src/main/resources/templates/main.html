@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+ <html xmlns:th="http://www.thymeleaf.org">
+     <head>
+         <title>Thymeleaf tutorial: exercise 2</title>
+         <link rel="stylesheet" href="../../../css/main-static.css" th:href="@{/css/main.css}" />
+         <meta charset="utf-8" />
+     </head>
+     <body>
+         <h1 >Thymeleaf tutorial - Solution for exercise 4: internationalization</h1>
+         <h2 th:text="#{greeting}">Product information</h2><!-- 以上用于国际化，读取配置文件 -->
+         <dl>
+             <dt>user name</dt>
+             <dd th:text="${user.name}">Red Chair</dd>
+ 
+             <dt>user age </dt>
+             <dd th:text="${user.age}">ha</dd>
+             <dd th:text="${user.age+' years old'}">235</dd><!-- 字符串凭借 -->
+             <dt>user password  </dt>
+             <dd th:text="${user.password}">ha</dd>
+             
+               <dt>user birthday</dt>
+             <dd th:text="${#dates.format(user.birthday, 'yyyy-MM-dd')}">ha</dd><!-- 数据转换 -->
+         </dl>
+         
+         <a href="#" th:href="@{/decoupled}">View decoupled</a><!-- 超链接 -->
+         
+          <table>
+             <thead>
+                 <tr>
+                     <th>Index</th>
+                     <th>Description</th>
+                     <th>Price</th>
+                     <th>Available from</th>
+                     <th></th>
+                 </tr>
+             </thead>
+             <tbody th:remove="all-but-first">
+                 <tr th:each="user:${userList}"><!--遍历-->
+                     <td th:text="${userStat.count}">1</td><!-- 统计 -->
+                     <td th:text="${user.name}">Red Chair</td>
+                     <td th:text="${'$' + #numbers.formatDecimal(user.number, 1, 2)}">$123</td>
+                     <td th:text="${#dates.format(user.birthday, 'yyyy-MM-dd')}">2014-12-01</td>
+                     <td>
+                        <span th:if="${user.age lt 19}" class="offer">older!</span>
+                     </td>
+                     <!-- 
+                     <td th:switch="${customer.gender?.name()}">
+                         <img th:case="'MALE'" src="../../../images/male.png" th:src="@{/images/male.png}" alt="Male" /> 
+                         <img th:case="'FEMALE'" src="../../../images/female.png" th:src="@{/images/female.png}" alt="Female" /> 
+                         <span th:case="*">Unknown</span>
+                     </td> -->
+                 </tr>
+                 <tr>
+                     <td>2</td>
+                     <td>White table</td>
+                     <td>$200</td>
+                     <td>15-Jul-2013</td>
+                      <td>2</td>
+                 </tr>
+                 <tr>
+                      <td>3</td>
+                     <td>Reb table</td>
+                     <td>$200</td>
+                     <td>15-Jul-2013</td>
+                      <td>2</td>
+                 </tr>
+                 <tr>
+                     <td>4</td>
+                     <td>Blue table</td>
+                     <td>$200</td>
+                     <td>15-Jul-2013</td>
+                      <td>2</td>
+                 </tr>
+             </tbody>
+         </table>
+         
+         
+         <!-- 表单 -->
+         <form action="saveCustomer.html" th:action="@{/save}" th:object="${user}" method="post">
+             <input type="hidden" th:field="*{id}" />
+             
+             <label for="name"> name:</label>
+             <input type="text" th:field="*{name}" value="John" />
+             
+             Genre:
+             <div th:each="gender : ${genders}" class="radio">
+                 <input type="radio" th:value="${gender}" th:field="*{gender}" />
+                 <label th:for="${#ids.prev('gender')}" th:text="${gender.description}">Male</label>
+             </div>
+             <div th:remove="all" class="radio">
+                 <input type="radio" />
+                 <label>Female</label>
+             </div>
+             
+             <label for="paymentMethod">Payment method:</label>
+             <select th:field="*{paymentMethod}" th:remove="all-but-first">
+                 <option th:each="paymentMethod : ${paymentMethods}"
+                         th:value="${paymentMethod}" th:text="${paymentMethod.description}">Credit card</option>
+                 <option>Another payment method</option>
+                 <option>Another payment method</option>
+             </select>
+             
+             
+             <input type="submit" />
+         </form>
+         
+         <!-- 内联 3.0后建议去掉th:inline="text" 去掉效果一样 -->
+           <form action="#" method="post">
+		      <label for="body">Message body:</label>
+		<textarea id="body" name="body" th:inline="text">
+		Dear [[${customerName}]],
+		it is our sincere pleasure to congratulate your in your birthday:
+		  Happy birthday [[${customerName}]]!!!
+		See you soon, [[${customerName}]].
+		Regards,
+		  The Thymeleaf team
+		</textarea>
+		      <input type="submit" value="Send mail" />
+		    </form>
+     </body>
+ </html>
